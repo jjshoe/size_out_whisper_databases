@@ -59,7 +59,10 @@ foreach my $interval (sort time_unit keys(%{$intervals}))
 	}
 }
 
-print "\nTotal size: " . human_size(size => $total_size) . "\n";
+print "\n";
+print "Size per check: " . human_size(size => $total_size / $checks) . "\n";
+print "Size per machine: " . human_size(size => $total_size / $machines) . "\n";
+print "Total size: " . human_size(size => $total_size) . "\n";
 
 sub unravel_units
 {

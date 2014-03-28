@@ -32,7 +32,7 @@ foreach my $interval (keys(%{$intervals}))
 {
 	system("$whisper_bin $junk_whisper_file $interval > /dev/null");
 		
-	if (-e '/tmp/junk.wsp')
+	if (-e $junk_whisper_file)
 	{
 		print "$interval " . human_size(size => -s $junk_whisper_file) . "\n";
 		unlink($junk_whisper_file);

@@ -97,7 +97,7 @@ sub human_size
 	my $n = 0;
 
 	++$n and $size /= 1024 until $size < 1024;
-	return sprintf "%.2f %s", $size, ( qw[ bytes KB MB GB ] )[ $n ];
+	return sprintf "%.2f %s", $size, ( qw[ bytes KB MB GB TB PB] )[ $n ];
 }
 
 sub time_unit

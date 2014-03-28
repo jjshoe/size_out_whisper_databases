@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Getopt::Long;
+use Pod::Usage;
 
 my $whisper_bin = '/usr/local/bin/whisper-create.py';
 my $junk_whisper_file = '/tmp/junk.wsp';

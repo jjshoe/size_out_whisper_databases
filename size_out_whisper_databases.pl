@@ -3,8 +3,6 @@
 use strict;
 use warnings;
 
-use Data::Dumper;
-
 my $whisper_bin = '/usr/local/bin/whisper-create.py';
 my $junk_whisper_file = '/tmp/junk.wsp';
 my $intervals;

@@ -11,6 +11,7 @@ my $intervals;
 my $checks = 1;
 my $machines = 1;
 my $help;
+my $total_size;
 
 GetOptions
 (
@@ -44,16 +45,21 @@ foreach my $argument (@ARGV)
 	}
 }
 
-foreach my $interval (keys(%{$intervals}))
+foreach my $interval (sort time_unit keys(%{$intervals}))
 {
 	system("$whisper_bin $junk_whisper_file $interval > /dev/null");
 		
 	if (-e $junk_whisper_file)
 	{
-		print "$interval " . human_size(size => (-s $junk_whisper_file) * $checks * $machines) . "\n";
+		my $size = (-s $junk_whisper_file) * $checks * $machines;
+		$total_size += $size;
+
+		print "$interval " . human_size(size => $size) . "\n";
 		unlink($junk_whisper_file);
 	}
 }
+
+print "\nTotal size: " . human_size(size => $total_size) . "\n";
 
 sub unravel_units
 {
@@ -92,6 +98,29 @@ sub human_size
 
 	++$n and $size /= 1024 until $size < 1024;
 	return sprintf "%.2f %s", $size, ( qw[ bytes KB MB GB ] )[ $n ];
+}
+
+sub time_unit
+{
+	if (($a =~ /s:/ && $b =~ /[mdy]:/) || ($a =~ /m:/ && $b =~ /[dy]:/) || ($a =~ /d:/ && $b =~ /[y]:/))
+	{
+		return -1;
+	} 
+	elsif (($a =~ /y:/ && $b =~ /[smd]:/) || ($a =~ /d:/ && $b =~ /[sm]:/) || ($a =~ /m:/ && $b =~ /s:/))
+	{
+		return 1;
+	}
+	else
+	{
+		# Same unit, sort by number pre-unit
+		$a =~ /^(\d+)[smdy]:/;		
+		my $left_number = $1;
+		
+		$b =~ /^(\d+)[smdy]:/;		
+		my $right_number = $1;
+	
+		return $left_number <=> $right_number;
+	}
 }
 
 __END__
